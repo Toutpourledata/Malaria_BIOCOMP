@@ -21,7 +21,7 @@ Malaria_equations = [
 ]
 
 param = [ϕ => 0.05, 
-        Z => 100,
+        Z => 1,
         ph => 0.001,
         qv => 0.05,
         h => 0.01,
@@ -33,6 +33,7 @@ param = [ϕ => 0.05,
         b => 0.015,
         δ => 0.025,
         θ => 0.02]
+
 # initial conditions
 
 u0 = [
@@ -52,9 +53,6 @@ duree = (0.0, 100)
 
 prob = ODEProblem(Malaria_system, u0, duree, param, jac=true)
 sol = solve(prob, saveat=0.0:0.5:100, verbose=true)
-
-#plt = plot(sol.t, Float32.(sol[end]), vars=[Hs, Hp, Hr, Vs, Vp], legend=:right, xlabel="Time (years)", ylabel="Population size")
-#display(plt)
 
 # Figure
 fig = Figure(; resolution=(1000,500))
