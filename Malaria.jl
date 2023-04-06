@@ -3,7 +3,6 @@ using CairoMakie
 using Latexify
 using DifferentialEquations
 
-# Paramètres et variables
 
 @parameters t ϕ Z ph qv h ψh ψv μh λ β b δ θ
 @variables Hs(t) Hp(t) Hr(t) Vs(t) Vp(t)
