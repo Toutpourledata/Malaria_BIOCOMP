@@ -23,42 +23,24 @@ Malaria_equations = [
 
 ]
 #valeurs des paramètres
-param = [ϕ => 0.05,  #Entrants dans Hs (naissance et immigration)
-        Z => 1,      #Entrants (vecteur)
-        ph => 0.001, #Probabilité qu'un immigrant soit parasité?
-        qv => 0.05,  #
-        h => 0.01,   #
-        ψh => 0.08,  #Taux de sortie des humains
-        ψv => 0.08,  #Taux de sortie des vecteurs
-        μh => 0.05,  #Taux de mortalité dû au parasite
-        λ => 0.075,  #Taux de transmission
+
+param = [ϕ => 150,  #Entrants dans Hs (naissance et immigration)
+        Z => 0.1,      #Entrants (vecteur)
+        ψh => 0.001,  #Taux de sortie des humains
+        ψv => 0.001,  #Taux de sortie des vecteurs
+        μh => 0.001,  #Taux de mortalité dû au parasite
+        λ => 0.0001,  #Taux de transmission
         β => 0.02,   #Taux de guérison
-        b => 0.015,  #
-        δ => 0.025,  #Taux de perte d'immunité
-        θ => 0.02]   #Taux de vaccination
+        δ => 0.05,  #Taux de perte d'immunité
+        θ => 0.001]   #Taux de vaccination
 
-param = [ϕ => 0.05, 
-        Z => 1,
-        ph => 0.001,
-        qv => 0.05,
-        h => 0.01,
-        ψh => 0.08,
-        ψv => 0.08,
-        μh => 0.05,
-        λ => 0.075,
-        β => 0.02,
-        b => 0.015,
-        δ => 0.025,
-        θ => 0.02]
-# initial conditions
-
+# conditions initiales
 u0 = [
-    Hs => 5000,   # humains susceptibles
-    Hp => 1000,   # humains parasités
-    Hr => 500,    # humains rétablis
-    Vs => 10000,  # vecteur susceptibles
-    Vp => 500]    # vecteur parasités
-
+    Hs => 5000,   # humains susceptibles (black)
+    Hp => 1000,   # humains parasités (red)
+    Hr => 500,    # humains rétablis (green)
+    Vs => 6040,  # vecteur susceptibles (orange)
+    Vp => 50]    # vecteur parasités (blue)
 # durée
 duree = (0.0, 100)
 
