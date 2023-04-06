@@ -14,11 +14,7 @@ using DifferentialEquations
 # δ : Taux de perte de l'immunité
 # θ : Taux de vaccination
 @variables Hs(t) Hp(t) Hr(t) Vs(t) Vp(t)
-# H : Humains
-# V : Vecteurs
-# s : Individus susceptibles
-# p : Individus parasités
-# r : Individus immunisés
+
 
 Malaria_equations = [
           # entrées              #sorties
