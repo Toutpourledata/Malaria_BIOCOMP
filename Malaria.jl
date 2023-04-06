@@ -20,6 +20,9 @@ using DifferentialEquations
 # p : Individus parasités
 # r : Individus rétablis
 
+# Système d'équations différentielles
+D = Differential(t)
+
 Malaria_equations = [
           # entrées              #sorties
     D(Hs) ~ Zh +  δ*Hr         - Hs*(λ*Vp+θ+ψh),
