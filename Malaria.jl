@@ -13,16 +13,16 @@ using DifferentialEquations
 # δ : Taux de perte de l'immunité
 # θ : Taux de vaccination
 
-# Valeurs des paramètres
-param = [Zh => 150,  
-        Zv => 0.1,   
+# Valeurs des paramètre
+param = [Zh => 0.2,  
+        Zv => 50,   
         ψh => 0.001, 
-        ψv => 0.001, 
-        μ => 0.001, 
+        ψv => 0.01, 
+        μ => 0.01, 
         λ => 0.0001, 
-        β => 0.02,   
-        δ => 0.05,  
-        θ => 0.001] 
+        β => 0.2,   
+        δ => 0.2,  
+        θ => 0.1] 
 
 @variables Hs(t) Hp(t) Hr(t) Vs(t) Vp(t)
 # H : Population d'humains
@@ -33,10 +33,10 @@ param = [Zh => 150,
 
 # Conditions initiales
 u0 = [
-    Hs => 5000,  
-    Hp => 1000,  
-    Hr => 500,   
-    Vs => 6040,  
+    Hs => 5500,  
+    Hp => 5,  
+    Hr => 1000,   
+    Vs => 6500,  
     Vp => 50]  
 
 #Création du modèle
@@ -51,19 +51,19 @@ Malaria_equations = [
 ]  
 
 # Durée de la simulation
-duree = (0.0, 100)
+duree = (0.0, 350)
 
 # Résolution du modèle
 @named Malaria_system = ODESystem(Malaria_equations)
 prob = ODEProblem(Malaria_system, u0, duree, param, jac=true)
-sol = solve(prob, saveat=0.0:0.5:100, verbose=true)
+sol = solve(prob, saveat=0.0:0.5:350, verbose=true)
 
 # Création d'un canva pour le graphique
 fig = Figure(; resolution=(1000,500))
 
 # Identification des axes
 timecourse = Axis(fig[1,1]; title = "Modèle de la propagation de la Malaria", xlabel="Temps", ylabel="Individus dans la population")
-xlims!(timecourse, (0., 100.))
+xlims!(timecourse, (0., 350.))
 ylims!(timecourse, (0., 10000.))
 
 # Ajout des courbes de tendances
@@ -78,3 +78,5 @@ axislegend()
 
 # Visualisation du graphique
 current_figure()
+
+#
