@@ -5,35 +5,48 @@ using DifferentialEquations
 
 # Paramètres et variables
 
-@parameters t ϕ Z ph qv h ψh ψv μh λ β b δ θ
+@parameters t ϕ Z ψh ψv μh λ β δ θ
+# t : temps
+# ϕ : Taux d'entrée pour les humains (naissance et immigration)
+# Z : Taux d'entrée pour les vecteurs
+# ψ : Taux de sortie des individus (mortalité naturelle et émmigration) 
+# μ : Taux de mortalité du au parasite
+# λ : Taux de transmission du parasite
+# β : Taux de rétablissement des humains
+# δ : Taux de perte d'immunité
+# θ : Taux de vaccination
 @variables Hs(t) Hp(t) Hr(t) Vs(t) Vp(t)
-
+# H : Population d'humains
+# V : Population de vecteurs
+# s : Individus susceptibles
+# p : Individus parasités
+# r : Individus immunisés
 
 # Système d'équations différentielles
 D = Differential(t)
-Malaria_equations = [
 
-    D(Hs) ~ ϕ + δ*Hr - Hs*(λ-Vp-θ),
-    D(Hp) ~ λ*Vp*Hs - Hp*(ψh+μh+β),
-    D(Hr) ~ β*Hp + θ*Hs + Hr*(ψh+δ),
-    D(Vp) ~ λ*Hp*Vs + Z - Vs*ψv,
-    D(Vs) ~ Z-λ*Vp*Hs
+Malaria_equations = [
+          # entrées              #sorties
+    D(Hs) ~ ϕ +  δ*Hr         - Hs*(λ*Vp+θ+ψh),
+    D(Hp) ~      λ*Vp*Hs      - Hp*(ψh+μh+β),
+    D(Hr) ~      β*Hp + θ*Hs  - Hr*(ψh+δ),
+    D(Vs) ~ Z                 - λ*Hp*Vs - Vs*ψv,
+    D(Vp) ~      λ*Hp*Vs      - Vp*ψv
+
 ]
 
-param = [ϕ => 0.05, 
-        Z => 1,
-        ph => 0.001,
-        qv => 0.05,
-        h => 0.01,
-        ψh => 0.08,
-        ψv => 0.08,
-        μh => 0.05,
-        λ => 0.075,
-        β => 0.02,
-        b => 0.015,
-        δ => 0.025,
-        θ => 0.02]
-# initial conditions
+param = [ϕ => 150,    
+        Z => 0.1,     
+        ψh => 0.001,  
+        ψv => 0.001,  
+        μh => 0.001,  
+        λ => 0.0001,  
+        β => 0.02,    
+        δ => 0.05,    
+        θ => 0.001]   
+
+
+# Conditions initiales
 
 u0 = [
     Hs => 5000,
