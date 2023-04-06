@@ -62,7 +62,7 @@ sol = solve(prob, saveat=0.0:0.5:100, verbose=true)
 fig = Figure(; resolution=(1000,500))
 
 # Identification des axes
-timecourse = Axis(fig[1,1]; xlabel="Temps", ylabel="Population")
+timecourse = Axis(fig[1,1]; title = "Modèle de la propagation de la Malaria", xlabel="Temps", ylabel="Individus dans la population")
 xlims!(timecourse, (0., 100.))
 ylims!(timecourse, (0., 10000.))
 
@@ -72,6 +72,9 @@ lines!(timecourse, sol[2, :], label="Hp", color=:red)
 lines!(timecourse, sol[3, :], label="Hr", color=:green)
 lines!(timecourse, sol[4, :], label="Vs", color=:blue)
 lines!(timecourse, sol[5, :], label="Vp", color=:orange)
+
+# Ajout d'une légende
+axislegend()
 
 # Visualisation du graphique
 current_figure()
