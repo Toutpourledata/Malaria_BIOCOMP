@@ -24,23 +24,27 @@ Malaria_equations = [
 ]
 #valeurs des paramètres
 
-param = [ϕ => 150,  #Entrants dans Hs (naissance et immigration)
-        Z => 0.1,      #Entrants (vecteur)
+param = [
+        #paramètres NON multiplicatifs
+        ϕ => 2,  #Entrants dans Hs (naissance et immigration)
+        Z => 600,      #Entrants (vecteur)
+
+        #paramètres multiplicatifs
         ψh => 0.001,  #Taux de sortie des humains
-        ψv => 0.001,  #Taux de sortie des vecteurs
+        ψv => 0.01,  #Taux de sortie des vecteurs
         μh => 0.001,  #Taux de mortalité dû au parasite
         λ => 0.0001,  #Taux de transmission
-        β => 0.02,   #Taux de guérison
-        δ => 0.05,  #Taux de perte d'immunité
-        θ => 0.001]   #Taux de vaccination
+        β => 0.8,   #Taux de guérison
+        δ => 0.5,  #Taux de perte d'immunité
+        θ => 0.01]   #Taux de vaccination
 
 # conditions initiales
 u0 = [
     Hs => 5000,   # humains susceptibles (black)
-    Hp => 1000,   # humains parasités (red)
-    Hr => 500,    # humains rétablis (green)
-    Vs => 6040,  # vecteur susceptibles (orange)
-    Vp => 50]    # vecteur parasités (blue)
+    Hp => 15,   # humains parasités (red)
+    Hr => 3,    # humains rétablis (green)
+    Vs => 100000,  # vecteur susceptibles (orange)
+    Vp => 100]    # vecteur parasités (blue)
 # durée
 duree = (0.0, 100)
 
@@ -51,17 +55,24 @@ prob = ODEProblem(Malaria_system, u0, duree, param, jac=true)
 sol = solve(prob, saveat=0.0:0.5:100, verbose=true)
 
 # graphique
-fig = Figure(; resolution=(1000,500))
-timecourse = Axis(fig[1,1]; xlabel="Temps", ylabel="Population")
+fig = Figure(; resolution=(1000, 1000), layout=(2, 1))
 
-# on ajoute une ligne pour chaque variable
-lines!(timecourse, sol[1, :], label="Hs", color=:black)
-lines!(timecourse, sol[2, :], label="Hp", color=:red)
-lines!(timecourse, sol[3, :], label="Hr", color=:green)
-lines!(timecourse, sol[4, :], label="Vs", color=:blue)
-lines!(timecourse, sol[5, :], label="Vp", color=:orange)
-xlims!(timecourse, (0., 100.))
-ylims!(timecourse, (0., 10000.))
+# humains
+timecourse_human = Axis(fig[1, 1]; xlabel="Temps", ylabel="Population humaine")
+lines!(timecourse_human, sol[1, :]+sol[2, :]+sol[3, :], label="total_H", color=:yellow)
+lines!(timecourse_human, sol[1, :], label="Hs", color=:black)
+lines!(timecourse_human, sol[2, :], label="Hp", color=:red)
+lines!(timecourse_human, sol[3, :], label="Hr", color=:green)
+xlims!(timecourse_human, (0., 100.))
+ylims!(timecourse_human, (0., 10000.))
 
-#générer le graphique
-current_figure()
+# vecteurs 
+timecourse_vector = Axis(fig[2, 1]; xlabel="Temps", ylabel="Population vecteur")
+lines!(timecourse_vector, sol[4, :]+sol[5, :], label="total_V", color=:purple)
+lines!(timecourse_vector, sol[4, :], label="Vs", color=:blue)
+lines!(timecourse_vector, sol[5, :], label="Vp", color=:orange)
+xlims!(timecourse_vector, (0., 100.))
+ylims!(timecourse_vector, (0., 120000.))
+
+# Display
+fig
