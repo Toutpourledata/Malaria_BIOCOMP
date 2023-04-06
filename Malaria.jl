@@ -62,7 +62,7 @@ sol = solve(prob, saveat=0.0:0.5:350, verbose=true)
 fig = Figure(; resolution=(1000,500))
 
 # Identification des axes
-timecourse = Axis(fig[1,1]; title = "Modèle de la propagation de la Malaria", xlabel="Temps", ylabel="Individus dans la population")
+timecourse = Axis(fig[1,1]; title = "Modèle de la propagation de la Malaria", xlabel="Temps (jours)", ylabel="Population (individus)")
 xlims!(timecourse, (0., 350.))
 ylims!(timecourse, (0., 10000.))
 
