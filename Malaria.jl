@@ -14,45 +14,45 @@ using DifferentialEquations
 D = Differential(t)
 
 Malaria_equations = [
-          # entrées              #sorties
-    D(Hs) ~ ϕ +  δ*Hr         - Hs*(λ*Vp+θ+ψh),
-    D(Hp) ~      λ*Vp*Hs      - Hp*(ψh+μh+β),
-    D(Hr) ~      β*Hp + θ*Hs  - Hr*(ψh+δ),
-    D(Vs) ~ Z                 - λ*Hp*Vs - Vs*ψv,
-    D(Vp) ~      λ*Hp*Vs      - Vp*ψv
+               # entrées                                 #sorties
+    D(Hs) ~ ϕ +  δ*Hr                            - Hs*(λ*Vp+θ+ψh),
+    D(Hp) ~      λ*Vp*Hs                         - Hp*(ψh+μh+β),
+    D(Hr) ~      β*Hp + θ*Hs                     - Hr*(ψh+δ),
+    D(Vs) ~ Z * (1+ 1*cos(2 * pi * t /360))      - λ*Hp*Vs - Vs*ψv,
+    D(Vp) ~      λ*Hp*Vs                         - Vp*ψv
 
 ]
 #valeurs des paramètres
 
 param = [
         #paramètres NON multiplicatifs
-        ϕ => 2,  #Entrants dans Hs (naissance et immigration)
-        Z => 600,      #Entrants (vecteur)
+        ϕ => 5,  #Entrants dans Hs (naissance et immigration)
+        Z => 500,      #Entrants (vecteur)
 
         #paramètres multiplicatifs
         ψh => 0.001,  #Taux de sortie des humains
         ψv => 0.01,  #Taux de sortie des vecteurs
-        μh => 0.001,  #Taux de mortalité dû au parasite
-        λ => 0.0001,  #Taux de transmission
+        μh => 0.0005,  #Taux de mortalité dû au parasite
+        λ => 0.00001,  #Taux de transmission
         β => 0.8,   #Taux de guérison
         δ => 0.5,  #Taux de perte d'immunité
-        θ => 0.01]   #Taux de vaccination
+        θ => 0.05]   #Taux de vaccination
 
 # conditions initiales
 u0 = [
     Hs => 5000,   # humains susceptibles (black)
     Hp => 15,   # humains parasités (red)
     Hr => 3,    # humains rétablis (green)
-    Vs => 100000,  # vecteur susceptibles (orange)
+    Vs => 50000,  # vecteur susceptibles (orange)
     Vp => 100]    # vecteur parasités (blue)
 # durée
-duree = (0.0, 100)
+duree = (0.0, 3650)
 
 # résoudre le système d'équations différentielles
 @named Malaria_system = ODESystem(Malaria_equations)
 
 prob = ODEProblem(Malaria_system, u0, duree, param, jac=true)
-sol = solve(prob, saveat=0.0:0.5:100, verbose=true)
+sol = solve(prob, saveat=0.0:0.5:3650, verbose=true)
 
 # graphique
 fig = Figure(; resolution=(1000, 1000), layout=(2, 1))
@@ -63,7 +63,7 @@ lines!(timecourse_human, sol[1, :]+sol[2, :]+sol[3, :], label="total_H", color=:
 lines!(timecourse_human, sol[1, :], label="Hs", color=:black)
 lines!(timecourse_human, sol[2, :], label="Hp", color=:red)
 lines!(timecourse_human, sol[3, :], label="Hr", color=:green)
-xlims!(timecourse_human, (0., 100.))
+xlims!(timecourse_human, (0., 3650.))
 ylims!(timecourse_human, (0., 10000.))
 
 # vecteurs 
@@ -71,8 +71,9 @@ timecourse_vector = Axis(fig[2, 1]; xlabel="Temps", ylabel="Population vecteur")
 lines!(timecourse_vector, sol[4, :]+sol[5, :], label="total_V", color=:purple)
 lines!(timecourse_vector, sol[4, :], label="Vs", color=:blue)
 lines!(timecourse_vector, sol[5, :], label="Vp", color=:orange)
-xlims!(timecourse_vector, (0., 100.))
-ylims!(timecourse_vector, (0., 120000.))
+xlims!(timecourse_vector, (0., 3650.))
+ylims!(timecourse_vector, (0., 100000.))
 
 # Display
 fig
+
