@@ -1,7 +1,6 @@
 # Chargement des packages
 using ModelingToolkit
 using CairoMakie
-using Latexify
 using DifferentialEquations
 
 @parameters t Zh Zv ψh ψv μ λ β δ θ
