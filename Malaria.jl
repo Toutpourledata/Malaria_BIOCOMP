@@ -4,49 +4,43 @@ using CairoMakie
 using Latexify
 using DifferentialEquations
 
-# Ajout des paramètres et variables
+# Paramètres et variables
+
 @parameters t ϕ Z ph qv h ψh ψv μh λ β b δ θ
-#
 @variables Hs(t) Hp(t) Hr(t) Vs(t) Vp(t)
-# H : Humains
-# V : Vecteurs
-# s : Individus susceptibles
-# p : Individus parasités
-# r : Individus immunisés
 
-# système d'équations différentielles 
+
+# Système d'équations différentielles
 D = Differential(t)
-Malaria_equations = [
 
-    D(Hs) ~ ϕ + δ*Hr - Hs*(λ-Vp-θ),
-    D(Hp) ~ λ*Vp*Hs - Hp*(ψh+μh+β),
-    D(Hr) ~ β*Hp + θ*Hs + Hr*(ψh+δ),
-    D(Vp) ~ λ*Hp*Vs + Z - Vs*ψv,
-    D(Vs) ~ Z-λ*Vp*Hs
+Malaria_equations = [
+          # entrées              #sorties
+    D(Hs) ~ ϕ +  δ*Hr         - Hs*(λ*Vp+θ+ψh),
+    D(Hp) ~      λ*Vp*Hs      - Hp*(ψh+μh+β),
+    D(Hr) ~      β*Hp + θ*Hs  - Hr*(ψh+δ),
+    D(Vs) ~ Z                 - λ*Hp*Vs - Vs*ψv,
+    D(Vp) ~      λ*Hp*Vs      - Vp*ψv
+
 ]
 #valeurs des paramètres
-param = [ϕ => 0.05,  #Entrants dans Hs (naissance et immigration)
-        Z => 1,      #Entrants (vecteur)
-        ph => 0.001, #Probabilité qu'un immigrant soit parasité?
-        qv => 0.05,  #
-        h => 0.01,   #
-        ψh => 0.08,  #Taux de sortie des humains
-        ψv => 0.08,  #Taux de sortie des vecteurs
-        μh => 0.05,  #Taux de mortalité dû au parasite
-        λ => 0.075,  #Taux de transmission
+
+param = [ϕ => 150,  #Entrants dans Hs (naissance et immigration)
+        Z => 0.1,      #Entrants (vecteur)
+        ψh => 0.001,  #Taux de sortie des humains
+        ψv => 0.001,  #Taux de sortie des vecteurs
+        μh => 0.001,  #Taux de mortalité dû au parasite
+        λ => 0.0001,  #Taux de transmission
         β => 0.02,   #Taux de guérison
-        b => 0.015,  #
-        δ => 0.025,  #Taux de perte d'immunité
-        θ => 0.02]   #Taux de vaccination
+        δ => 0.05,  #Taux de perte d'immunité
+        θ => 0.001]   #Taux de vaccination
 
 # conditions initiales
 u0 = [
-    Hs => 5000,   # humains susceptibles
-    Hp => 1000,   # humains parasités
-    Hr => 500,    # humains rétablis
-    Vs => 10000,  # vecteur susceptibles
-    Vp => 500]    # vecteur parasités
-
+    Hs => 5000,   # humains susceptibles (black)
+    Hp => 1000,   # humains parasités (red)
+    Hr => 500,    # humains rétablis (green)
+    Vs => 6040,  # vecteur susceptibles (orange)
+    Vp => 50]    # vecteur parasités (blue)
 # durée
 duree = (0.0, 100)
 
